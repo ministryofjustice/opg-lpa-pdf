@@ -86,11 +86,7 @@ class Client extends AbstractClient {
                 }
 
                 $result = null;
-
-                // These queries take up 0.5 read units, so by waiting 500ms we ensure each worker
-                // doesn't require more than 1 read unit per second.
-                usleep(500000); // 500ms
-
+                
             }
 
             //----
