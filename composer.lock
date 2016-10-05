@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "101cf42425e9d99ac09a8b3fb6a71da9",
-    "content-hash": "2b7cd160355c71475087342a4ada85d2",
+    "hash": "8af8a63d6ad0567767bf498aa28461e4",
+    "content-hash": "8ff9377f668bd07ddcdae17f762f51cb",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.19.11",
+            "version": "3.19.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "19bac3bdd7988cbf7f89d5ce8e2748d774e2cde8"
+                "reference": "5d5697c7bc9ab22ce718afb51e5496d0c5cb8778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/19bac3bdd7988cbf7f89d5ce8e2748d774e2cde8",
-                "reference": "19bac3bdd7988cbf7f89d5ce8e2748d774e2cde8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5d5697c7bc9ab22ce718afb51e5496d0c5cb8778",
+                "reference": "5d5697c7bc9ab22ce718afb51e5496d0c5cb8778",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2016-09-27 19:38:36"
+            "time": "2016-09-29 21:07:49"
         },
         {
             "name": "container-interop/container-interop",
@@ -510,16 +510,16 @@
         },
         {
             "name": "ministryofjustice/opg-lpa-datamodels",
-            "version": "v1.1.10",
+            "version": "dev-lpaHasFinishedCreation-tests",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ministryofjustice/opg-lpa-datamodels.git",
-                "reference": "81be109562f99ed5bb4120a2fa03d1508a8cdd43"
+                "reference": "eb79f4aee25581e309bfb9424cd2fd08967be2c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/81be109562f99ed5bb4120a2fa03d1508a8cdd43",
-                "reference": "81be109562f99ed5bb4120a2fa03d1508a8cdd43",
+                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/eb79f4aee25581e309bfb9424cd2fd08967be2c7",
+                "reference": "eb79f4aee25581e309bfb9424cd2fd08967be2c7",
                 "shasum": ""
             },
             "require": {
@@ -543,10 +543,10 @@
             ],
             "description": "PHP data models that represent a Lasting Power of Attorney",
             "support": {
-                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/v1.1.10",
+                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/lpaHasFinishedCreation-tests",
                 "issues": "https://github.com/ministryofjustice/opg-lpa-datamodels/issues"
             },
-            "time": "2016-09-29 10:05:10"
+            "time": "2016-10-05 10:54:42"
         },
         {
             "name": "ministryofjustice/opg-lpa-logger",
@@ -1044,7 +1044,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v2.8.11",
+            "version": "v2.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
@@ -2396,7 +2396,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.11",
+            "version": "v2.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -2446,7 +2446,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "ministryofjustice/opg-lpa-datamodels": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
