@@ -1,47 +1,59 @@
 <?php
+
 namespace Opg\Lpa\Pdf\Service\Forms;
 
 use Opg\Lpa\DataModel\Lpa\Lpa;
-use Opg\Lpa\Pdf\Config\Config;
-use Opg\Lpa\Pdf\Logger\Logger;
-use Opg\Lpa\Pdf\Service\PdftkInstance;
 
-class Cs4 extends AbstractForm
+class Cs4 extends AbstractCsForm
 {
+    /**
+     * Short ref for this continuation sheet
+     *
+     * @var
+     */
+    protected $csRef = 'cs4';
+
+    /**
+     * Filename of the PDF document to use
+     *
+     * @var
+     */
+    protected $pdfTemplateFilename = 'LPC_Continuation_Sheet_4.pdf';
+
+    /**
+     * Company number of the trust
+     *
+     * @var
+     */
     private $companyNumber;
-    
+
+    /**
+     * Constructor
+     *
+     * @param Lpa $lpa
+     * @param $companyNumber
+     */
     public function __construct(Lpa $lpa, $companyNumber)
     {
         parent::__construct($lpa);
+
         $this->companyNumber = $companyNumber;
     }
-    
+
+    /**
+     * Generate the correct number of continuation sheets
+     *
+     * @return array
+     */
     public function generate()
     {
-        Logger::getInstance()->info(
-            'Generating Cs4',
-            [
-                'lpaId' => $this->lpa->id
-            ]
-        );
-        
-        $filePath = $this->registerTempFile('CS4');
-        
-        $cs2 = PdftkInstance::getInstance($this->pdfTemplatePath.'/LPC_Continuation_Sheet_4.pdf');
-        
-        $cs2->fillForm(
-            array(
-                    'cs4-trust-corporation-company-registration-number' => $this->companyNumber,
-                    'cs4-footer-right'    => Config::getInstance()['footer']['cs4'],
-            ))
-        ->flatten()
-        ->saveAs($filePath);
-        
+        $this->logStartMessage();
+
+        $this->addFormData('cs4-trust-corporation-company-registration-number', $this->companyNumber)
+             ->addFormData('cs4-footer-right', $this->getFooter());
+
+        $filePath = $this->createContinuationSheetPdf();
+
         return $this->interFileStack;
-    } // function generate()
-    
-    public function __destruct()
-    {
-        
     }
-} // class Cs4
+}

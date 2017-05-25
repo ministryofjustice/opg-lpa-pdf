@@ -1,154 +1,151 @@
 <?php
+
 namespace Opg\Lpa\Pdf\Service\Forms;
 
 use Opg\Lpa\DataModel\Lpa\Lpa;
 use Opg\Lpa\DataModel\Lpa\Document\Document;
 use Opg\Lpa\DataModel\Lpa\Elements\Name;
 use Opg\Lpa\DataModel\Lpa\Elements\EmailAddress;
-use Opg\Lpa\Pdf\Config\Config;
-use Opg\Lpa\Pdf\Logger\Logger;
-use Opg\Lpa\Pdf\Service\PdftkInstance;
 
-class Cs1 extends AbstractForm
+class Cs1 extends AbstractCsForm
 {
     use AttorneysTrait;
-    
-    private $actorTypes, $actors=[];
-    
-    static $SETTINGS = array(
-        'max-slots-on-standard-form' => [
-            'primaryAttorney'       => Lp1::MAX_ATTORNEYS_ON_STANDARD_FORM,
-            'replacementAttorney'   => Lp1::MAX_REPLACEMENT_ATTORNEYS_ON_STANDARD_FORM,
-            'peopleToNotify'        => Lp1::MAX_PEOPLE_TO_NOTIFY_ON_STANDARD_FORM
-        ],
-        'max-slots-on-cs1-form'     => 2,
-        'actors'                 => [
-            'primaryAttorney'       => 'primaryAttorneys',
-            'replacementAttorney'   => 'replacementAttorneys',
-            'peopleToNotify'        => 'peopleToNotify'
-        ]
-    );
-    
+
     /**
-     * 
-     * @param Lpa $lpa
-     * @param string $actorTypes
+     * Short ref for this continuation sheet
+     *
+     * @var
      */
-    public function __construct(Lpa $lpa, $actorTypes)
-    {
-        Logger::getInstance()->info(
-            'Generating Cs1',
-            [
-                'lpaId' => $lpa->id
-            ]
-        );
-        
-        parent::__construct($lpa);
-        
-        $this->actorTypes = $actorTypes;
-        
-        /**
-         * One of LPA document actors property name
-         * @var string - primaryAttorneys | replacementAttorneys | peopleToNotify
-         */
-        foreach($actorTypes as $actorType) {
-            $actorGroup = self::$SETTINGS['actors'][$actorType];
-            
-            if(($lpa->document->type == Document::LPA_TYPE_PF) && ($actorGroup != 'peopleToNotify')) {
-                $actors = $this->sortAttorneys($actorGroup);
-            }
-            else {
-                $actors = $this->lpa->document->$actorGroup;
-            }
-            
-            sort($actors);
-            
-            $this->actors[$actorType] = $actors;
-        }
-    }
-    
+    protected $csRef = 'cs1';
+
     /**
-     * Calculate how many CS1 pages need to be generated to fit all content in for a field.
-     * 
-     * @return array - CS1 pdf paths
+     * Filename of the PDF document to use
+     *
+     * @var
+     */
+    protected $pdfTemplateFilename = 'LPC_Continuation_Sheet_1.pdf';
+
+    /**
+     * Array of actor types to process
+     *
+     * @var array
+     */
+    private $actorTypes;
+
+    /**
+     * Constructor
+     *
+     * @param Lpa $lpa
+     * @param array $actorTypes
+     */
+    public function __construct(Lpa $lpa, array $actorTypes)
+    {
+        parent::__construct($lpa);
+
+        $this->actorTypes = $actorTypes;
+    }
+
+    /**
+     * Generate the correct number of continuation sheets
+     *
+     * @return array
      */
     public function generate()
     {
+        $this->logStartMessage();
+
+        //  Define a mapping for the actor type to the number of actors allowed on the standard form
+        $maxSlotsOnStandardForm = [
+            'primaryAttorneys'     => Lp1::MAX_ATTORNEYS_ON_STANDARD_FORM,
+            'replacementAttorneys' => Lp1::MAX_REPLACEMENT_ATTORNEYS_ON_STANDARD_FORM,
+            'peopleToNotify'       => Lp1::MAX_PEOPLE_TO_NOTIFY_ON_STANDARD_FORM
+        ];
+
         $additionalActors = [];
-        
-        foreach($this->actors as $actorType => $actorGroup) {
-            $startingIndexForThisActorGroup = self::$SETTINGS['max-slots-on-standard-form'][$actorType];
-            $totalActorsInGroup = count($actorGroup);
-            for($i=$startingIndexForThisActorGroup; $i<$totalActorsInGroup; $i++) {
-                $additionalActors[] = ['person'=>$actorGroup[$i], 'type'=>$actorType];
+
+        //  Loop through the actor types, obtain the details from the LPA data and determine how many "additional" parties there are
+        foreach ($this->actorTypes as $actorType) {
+            //  Get the required actors from the LPA data
+            $actors = $this->lpa->document->$actorType;
+
+            //  If this is a P&F LPA and this is one of the list of attorneys, sort the data so that the trust is first
+            if ($this->lpa->document->type == Document::LPA_TYPE_PF && $actorType != 'peopleToNotify') {
+                $actors = $this->sortAttorneys($actorType);
             }
-        }
-        
-        if(empty($additionalActors)) return;
-        
-        foreach($additionalActors as $idx=>$actor) {
-            $pIdx = ($idx % self::$SETTINGS['max-slots-on-cs1-form']);
-            
-            if($pIdx == 0) {
-                $formData = [
-                    'cs1-donor-full-name' => $this->fullName($this->lpa->document->donor->name),
-                    'cs1-footer-right'    => Config::getInstance()['footer']['cs1'], 
+
+            sort($actors);
+
+            //  For any number of actors more than the standard amount allowed add them to the additional actors page
+            $startingIndexForThisActorGroup = $maxSlotsOnStandardForm[$actorType];
+
+            for ($i = $startingIndexForThisActorGroup; $i < count($actors); $i++) {
+                $additionalActors[] = [
+                    'person' => $actors[$i],
+                    'type'   => $actorType
                 ];
             }
-            
-            $formData['cs1-'.$pIdx.'-is'] = $actor['type'];
-            
-            if($actor['person']->name instanceof Name) {
-                $formData['cs1-'.$pIdx.'-name-title'] = $actor['person']->name->title;
-                $formData['cs1-'.$pIdx.'-name-first'] = $actor['person']->name->first;
-                $formData['cs1-'.$pIdx.'-name-last']  = $actor['person']->name->last;
+        }
+
+        //  If there are no additional actors to consider then exit early
+        if (empty($additionalActors)) {
+            return;
+        }
+
+        foreach ($additionalActors as $idx => $additionalActor) {
+            $pIdx = ($idx % 2);
+
+            if ($pIdx == 0) {
+                $this->addFormData('cs1-donor-full-name', $this->fullName($this->lpa->document->donor->name))
+                     ->addFormData('cs1-footer-right', $this->getFooter());
             }
-            else {
-                $formData['cs1-'.$pIdx.'-name-last'] = $actor['person']->name;
+
+            //  Determine the value for the actor type checkbox - for the attorneys remove the trailing 's'
+            $actorTypeCheckbox = $additionalActor['type'];
+
+            if (strpos($actorTypeCheckbox, 'Attorneys') > 0) {
+                $actorTypeCheckbox = str_replace('Attorneys', 'Attorney', $actorTypeCheckbox);
             }
-            
-            $formData['cs1-'.$pIdx.'-address-address1'] = $actor['person']->address->address1;
-            $formData['cs1-'.$pIdx.'-address-address2'] = $actor['person']->address->address2;
-            $formData['cs1-'.$pIdx.'-address-address3'] = $actor['person']->address->address3;
-            $formData['cs1-'.$pIdx.'-address-postcode'] = $actor['person']->address->postcode;
-            
-            if(property_exists($actor['person'], 'dob')) {
-                $formData['cs1-'.$pIdx.'-dob-date-day']   = $actor['person']->dob->date->format('d');
-                $formData['cs1-'.$pIdx.'-dob-date-month'] = $actor['person']->dob->date->format('m');
-                $formData['cs1-'.$pIdx.'-dob-date-year']  = $actor['person']->dob->date->format('Y');
+
+            $this->addFormData('cs1-' . $pIdx . '-is', $actorTypeCheckbox);
+
+            $actor = $additionalActor['person'];
+
+            if ($actor->name instanceof Name) {
+                $this->addFormData('cs1-' . $pIdx . '-name-title', $actor->name->title)
+                     ->addFormData('cs1-' . $pIdx . '-name-first', $actor->name->first)
+                     ->addFormData('cs1-' . $pIdx . '-name-last', $actor->name->last);
+            } else {
+                $this->addFormData('cs1-' . $pIdx . '-name-last', $actor->name);
             }
-            
-            if(property_exists($actor['person'], 'email') && ($actor['person']->email instanceof EmailAddress)) {
-                $formData['cs1-'.$pIdx.'-email-address'] = "\n".$actor['person']->email->address;
+
+            $this->addFormData('cs1-' . $pIdx . '-address-address1', $actor->address->address1)
+                 ->addFormData('cs1-' . $pIdx . '-address-address2', $actor->address->address2)
+                 ->addFormData('cs1-' . $pIdx . '-address-address3', $actor->address->address3)
+                 ->addFormData('cs1-' . $pIdx . '-address-postcode', $actor->address->postcode);
+
+            if (property_exists($actor, 'dob')) {
+                $this->addFormData('cs1-' . $pIdx . '-dob-date-day', $actor->dob->date->format('d'))
+                     ->addFormData('cs1-' . $pIdx . '-dob-date-month', $actor->dob->date->format('m'))
+                     ->addFormData('cs1-' . $pIdx . '-dob-date-year', $actor->dob->date->format('Y'));
             }
-            
-            if($pIdx == 1) {
-                $filePath = $this->registerTempFile('CS1');
-                $cs1 = PdftkInstance::getInstance($this->pdfTemplatePath."/LPC_Continuation_Sheet_1.pdf");
-                
-                $cs1->fillForm($formData)
-                    ->flatten()
-                    ->saveAs($filePath);
+
+            if (property_exists($actor, 'email') && $actor->email instanceof EmailAddress) {
+                $this->addFormData('cs1-' . $pIdx . '-email-address', "\n" . $actor->email->address);
+            }
+
+            //  If there are 2 actors in the data, or there are no more actors to come then draw the page
+            if ($pIdx == 1 || !array_key_exists($idx + 1, $additionalActors)) {
+                $filePath = $this->createContinuationSheetPdf();
+
+                //  If appropriate draw the strike through line on the blank inputs
+                if ($pIdx == 0) {
+                    $this->drawCrossLines($filePath, array(array('cs1')));
+                }
+
+                $this->clearFormData();
             }
         }
-        
-        if($pIdx == 0) {
-            $filePath = $this->registerTempFile('CS1');
-            $cs1 = PdftkInstance::getInstance($this->pdfTemplatePath."/LPC_Continuation_Sheet_1.pdf");
-            
-            $cs1->fillForm($formData)
-                ->flatten()
-                ->saveAs($filePath);
-            
-            // draw cross lines if there's any blank slot in the last CS1 pdf
-            $this->drawCrossLines($filePath, array(array('cs1')));
-        }
-        
+
         return $this->interFileStack;
-    } // function generate()
-    
-    public function __destruct()
-    {
-        
     }
-} // class Cs1
+}
