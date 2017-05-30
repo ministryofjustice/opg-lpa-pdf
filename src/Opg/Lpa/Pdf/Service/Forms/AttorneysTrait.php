@@ -7,18 +7,61 @@ use Opg\Lpa\DataModel\Lpa\Document\Attorneys\TrustCorporation;
 trait AttorneysTrait
 {
     /**
-     * if there is a trust corp, make it the first item in the attorneys array.
+     * Get an array of all of the attorneys (primary and replacement) for this LPA
      *
-     * @param string $attorneyType - 'primaryAttorneys'|'replacementAttorneys'
-     * @return array of primaryAttorneys or replacementAttorneys
+     * @return array
+     */
+    public function getAllAttorneys()
+    {
+        return array_merge($this->lpa->document->primaryAttorneys, $this->lpa->document->replacementAttorneys);
+    }
+
+    /**
+     * Get any trust attorney from the LPA details
+     *
+     * @return  TrustCorporation|null
+     */
+    protected function getTrustAttorney()
+    {
+        //  If no attorneys were passed into this function then get all of them from the LPA
+        if (empty($attorneys)) {
+            $attorneys = $this->getAllAttorneys();
+        }
+
+        foreach ($attorneys as $attorney) {
+            if ($attorney instanceof TrustCorporation) {
+                return $attorney;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if there is a trust attorney for this LPA
+     *
+     * @return bool
+     */
+    protected function hasTrustAttorney()
+    {
+        return ($this->getTrustAttorney() instanceof TrustCorporation);
+    }
+
+    /**
+     * Sort the attorney array so that the trust is first (if there is one)
+     *
+     * @param $attorneyType
+     * @return array
      */
     public function sortAttorneys($attorneyType)
     {
+        //  Get the attorneys for the specified type
         $attorneys = $this->lpa->document->$attorneyType;
 
         //  If there is more than one attorney sort them
-        if (count($attorneys) > 1 && $this->hasTrustCorporation($attorneys)) {
+        if (is_array($attorneys) && count($attorneys) > 1) {
             $sortedAttorneys = [];
+            $trustAttorney = null;
 
             foreach ($attorneys as $attorney) {
                 if ($attorney instanceof TrustCorporation) {
@@ -28,38 +71,13 @@ trait AttorneysTrait
                 }
             }
 
-            array_unshift($sortedAttorneys, $trustAttorney);
+            if ($trustAttorney instanceof TrustCorporation) {
+                array_unshift($sortedAttorneys, $trustAttorney);
+            }
+
             $attorneys = $sortedAttorneys;
         }
 
         return $attorneys;
-    }
-
-    /**
-     * check if there is a trust corp in the whole LPA or in primary attorneys or replacement attorneys.
-     */
-    protected function hasTrustCorporation($attorneys = null)
-    {
-        if (null == $attorneys) {
-            foreach ($this->lpa->document->primaryAttorneys as $attorney) {
-                if ($attorney instanceof TrustCorporation) {
-                    return true;
-                }
-            }
-
-            foreach ($this->lpa->document->replacementAttorneys as $attorney) {
-                if ($attorney instanceof TrustCorporation) {
-                    return true;
-                }
-            }
-        } else {
-            foreach ($attorneys as $attorney) {
-                if ($attorney instanceof TrustCorporation) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

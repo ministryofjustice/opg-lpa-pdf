@@ -168,110 +168,77 @@ abstract class Lp1 extends AbstractForm
             'lpaId' => $this->lpa->id
         ]);
 
-        $cs1ActorTypes = [];
+        //  If appropriate generate the Cs1 continuation sheet
+        if (count($this->lpa->document->primaryAttorneys) > self::MAX_ATTORNEYS_ON_STANDARD_FORM
+            || count($this->lpa->document->replacementAttorneys) > self::MAX_REPLACEMENT_ATTORNEYS_ON_STANDARD_FORM
+            || count($this->lpa->document->peopleToNotify) > self::MAX_PEOPLE_TO_NOTIFY_ON_STANDARD_FORM) {
 
-        // CS1 is to be generated when number of attorneys that are larger than what is available on standard form.
-        if (count($this->lpa->document->primaryAttorneys) > self::MAX_ATTORNEYS_ON_STANDARD_FORM) {
-            $cs1ActorTypes[] = 'primaryAttorneys';
-        }
-
-        if (count($this->lpa->document->replacementAttorneys) > self::MAX_REPLACEMENT_ATTORNEYS_ON_STANDARD_FORM) {
-            $cs1ActorTypes[] = 'replacementAttorneys';
-        }
-
-        // CS1 is to be generated when number of people to notify are larger than what is available on standard form.
-        if (count($this->lpa->document->peopleToNotify) > self::MAX_PEOPLE_TO_NOTIFY_ON_STANDARD_FORM) {
-            $cs1ActorTypes[] = 'peopleToNotify';
-        }
-
-        // generate CS1
-        if (!empty($cs1ActorTypes)) {
-            $generatedCs1 = (new Cs1($this->lpa, $cs1ActorTypes))->generate();
+            $continuationSheet1 = new Cs1($this->lpa);
+            $generatedCs1 = $continuationSheet1->generate();
             $this->mergerIntermediateFilePaths($generatedCs1);
         }
 
-        // generate a CS2 page if how attorneys making decisions depends on a special arrangement.
+        //  If appropriate generate the Cs2 continuation sheet if how attorneys make decisions depends on a special arrangement
         if ($this->lpa->document->primaryAttorneyDecisions->how == PrimaryAttorneyDecisions::LPA_DECISION_HOW_DEPENDS) {
-            $generatedCs2 = (new Cs2($this->lpa, self::CONTENT_TYPE_ATTORNEY_DECISIONS, $this->lpa->document->primaryAttorneyDecisions->howDetails))->generate();
+            $continuationSheetAttorneyDecisions = new Cs2AttorneyDecisions($this->lpa);
+            $generatedCs2 = $continuationSheetAttorneyDecisions->generate();
             $this->mergerIntermediateFilePaths($generatedCs2);
         }
 
-        // generate a CS2 page if how replacement attorneys decisions differs to the default arrangement.
-        $content = "";
-        if ((count($this->lpa->document->primaryAttorneys) == 1
-            || (count($this->lpa->document->primaryAttorneys) > 1 && $this->lpa->document->primaryAttorneyDecisions->how == PrimaryAttorneyDecisions::LPA_DECISION_HOW_JOINTLY))
-            && count($this->lpa->document->replacementAttorneys) > 1) {
+        //  If appropriate generate the Cs2 continuation sheet for when replacement attorneys should step in
+        $createRepAttorneyStepInContinuationSheet = false;
 
-            switch ($this->lpa->document->replacementAttorneyDecisions->how) {
-                case ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY:
-                    $content = "Replacement attorneys are to act jointly and severally\r\n";
-                    break;
-                case ReplacementAttorneyDecisions::LPA_DECISION_HOW_DEPENDS:
-                    $content = "Replacement attorneys are to act jointly for some decisions and jointly and severally for others, as below:\r\n" . $this->lpa->document->replacementAttorneyDecisions->howDetails . "\r\n";
-                    break;
-                case ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY:
-                    // default arrangement
-                    break;
-            }
-        } elseif (count($this->lpa->document->primaryAttorneys) > 1 && $this->lpa->document->primaryAttorneyDecisions->how == PrimaryAttorneyDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY) {
-            if (count($this->lpa->document->replacementAttorneys) == 1) {
+        $replacementAttorneys = $this->lpa->document->replacementAttorneys;
 
-                switch ($this->lpa->document->replacementAttorneyDecisions->when) {
-                    case ReplacementAttorneyDecisions::LPA_DECISION_WHEN_FIRST:
-                        // default arrangement, as per how primary attorneys making decision arrangement
-                        break;
-                    case ReplacementAttorneyDecisions::LPA_DECISION_WHEN_LAST:
-                        $content = "Replacement attorney to step in only when none of the original attorneys can act\r\n";
-                        break;
-                    case ReplacementAttorneyDecisions::LPA_DECISION_WHEN_DEPENDS:
-                        $content = "How replacement attorneys will replace the original attorneys:\r\n" . $this->lpa->document->replacementAttorneyDecisions->whenDetails;
-                        break;
-                }
-            } elseif (count($this->lpa->document->replacementAttorneys) > 1) {
-                if ($this->lpa->document->replacementAttorneyDecisions->when == ReplacementAttorneyDecisions::LPA_DECISION_WHEN_LAST) {
-                    $content = "Replacement attorneys to step in only when none of the original attorneys can act\r\n";
+        if (count($replacementAttorneys) > 0) {
+            $multiplePrimaryAttorneys = (count($this->lpa->document->primaryAttorneys) > 1);
+            $multipleReplacementAttorneys = (count($replacementAttorneys) > 1);
 
-                    switch ($this->lpa->document->replacementAttorneyDecisions->how) {
-                        case ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY:
-                            $content .= "Replacement attorneys are to act jointly and severally\r\n";
-                            break;
-                        case ReplacementAttorneyDecisions::LPA_DECISION_HOW_DEPENDS:
-                            $content .= "Replacement attorneys are to act joint for some decisions, joint and several for other decisions, as below:\r\n" . $this->lpa->document->replacementAttorneyDecisions->howDetails . "\r\n";
-                            break;
-                        case ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY:
-                            // default arrangement
-                            $content = "";
-                            break;
-                    }
-                } elseif ($this->lpa->document->replacementAttorneyDecisions->when == ReplacementAttorneyDecisions::LPA_DECISION_WHEN_DEPENDS) {
-                    $content = "How replacement attorneys will replace the original attorneys:\r\n". $this->lpa->document->replacementAttorneyDecisions->whenDetails;
+            $primaryAttorneysDecisions = $this->lpa->document->primaryAttorneyDecisions;
+            $replacementAttorneyDecisions = $this->lpa->document->replacementAttorneyDecisions;
+
+            if ($multipleReplacementAttorneys && (!$multiplePrimaryAttorneys || $primaryAttorneysDecisions->how == PrimaryAttorneyDecisions::LPA_DECISION_HOW_JOINTLY)) {
+                $createRepAttorneyStepInContinuationSheet = in_array($replacementAttorneyDecisions->how, [ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY, ReplacementAttorneyDecisions::LPA_DECISION_HOW_DEPENDS]);
+            } elseif ($multiplePrimaryAttorneys && $primaryAttorneysDecisions->how == PrimaryAttorneyDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY) {
+                if ($replacementAttorneyDecisions->when == ReplacementAttorneyDecisions::LPA_DECISION_WHEN_LAST) {
+                    $createRepAttorneyStepInContinuationSheet = !($multipleReplacementAttorneys && $replacementAttorneyDecisions->how == ReplacementAttorneyDecisions::LPA_DECISION_HOW_JOINTLY);
+                } elseif ($replacementAttorneyDecisions->when == ReplacementAttorneyDecisions::LPA_DECISION_WHEN_DEPENDS) {
+                    $createRepAttorneyStepInContinuationSheet = true;
                 }
             }
         }
 
-        if (!empty($content)) {
-            $generatedCs2 = (new Cs2($this->lpa, self::CONTENT_TYPE_REPLACEMENT_ATTORNEY_STEP_IN, $content))->generate();
+        if ($createRepAttorneyStepInContinuationSheet) {
+            $continuationSheetReplacementAttorneyStepIn = new Cs2ReplacementAttorneyStepIn($this->lpa);
+            $generatedCs2 = $continuationSheetReplacementAttorneyStepIn->generate();
             $this->mergerIntermediateFilePaths($generatedCs2);
         }
 
-        // generate a CS2 page if preference exceed available space on standard form.
+        //  If appropriate generate the Cs2 preferences continuation sheet
         if (!$this->canFitIntoTextBox($this->lpa->document->preference)) {
-            $generatedCs2 = (new Cs2($this->lpa, self::CONTENT_TYPE_PREFERENCES, $this->lpa->document->preference))->generate();
+            $continuationSheetPreferences = new Cs2Preferences($this->lpa);
+            $generatedCs2 = $continuationSheetPreferences->generate();
             $this->mergerIntermediateFilePaths($generatedCs2);
         }
 
-        // generate a CS2 page if instruction exceed available space on standard form.
+        //  If appropriate generate the Cs2 instructions continuation sheet
         if (!$this->canFitIntoTextBox($this->lpa->document->instruction)) {
-            $generatedCs2 = (new Cs2($this->lpa, self::CONTENT_TYPE_INSTRUCTIONS, $this->lpa->document->instruction))->generate();
+            $continuationSheetInstructions = new Cs2Instructions($this->lpa);
+            $generatedCs2 = $continuationSheetInstructions->generate();
             $this->mergerIntermediateFilePaths($generatedCs2);
         }
 
-        // generate CS3 page if donor cannot sign on LPA
-        if (false === $this->lpa->document->donor->canSign) {
-            $generatedCs3 = (new Cs3($this->lpa))->generate();
+        //  If appropriate generate the Cs3 continuation sheet
+        if ($this->lpa->document->donor->canSign === false) {
+            $continuationSheet3 = new Cs3($this->lpa);
+            $generatedCs3 = $continuationSheet3->generate();
             $this->mergerIntermediateFilePaths($generatedCs3);
         }
 
+
+
+
+//TODO - Need to test this!
         $numOfApplicants = count($this->lpa->document->whoIsRegistering);
 
         // Section 12 - Applicants. If number of applicant is greater than 4, duplicate this page as many as needed in order to fit all applicants in.

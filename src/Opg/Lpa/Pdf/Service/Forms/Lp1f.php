@@ -114,8 +114,9 @@ class Lp1f extends Lp1
         }
 
         // Attorney/Replacement signature (Section 11)
-        $allAttorneys = array_merge($this->lpa->document->primaryAttorneys, $this->lpa->document->replacementAttorneys);
-        $attorneyIndex=0;
+        $allAttorneys = $this->getAllAttorneys();
+        $attorneyIndex = 0;
+
         foreach($allAttorneys as $attorney) {
             if($attorney instanceof TrustCorporation) continue;
 
@@ -170,26 +171,25 @@ class Lp1f extends Lp1
         $this->pdfFormData['footer-registration-right'] = Config::getInstance()['footer']['lp1f']['registration'];
 
         return $this->pdfFormData;
-    } // function dataMapping();
+    }
 
-    protected function generateAdditionalPages ()
+    protected function generateAdditionalPages()
     {
+        //  First generate the additional pages in the parent class
         parent::generateAdditionalPages();
 
-        // CS4
-        if ($this->hasTrustCorporation()) {
-            $generatedCs4 = (new Cs4($this->lpa, $this->getTrustCorporation()->number))->generate();
+        //  If required generate the continuation sheet 4
+        if ($this->hasTrustAttorney()) {
+            $continuationSheet4 = new Cs4($this->lpa);
+            $generatedCs4 = $continuationSheet4->generate();
             $this->mergerIntermediateFilePaths($generatedCs4);
         }
 
-        // if number of attorneys (including replacements) is greater than 4, duplicate Section 11 - Attorneys Signatures page
-        // as many as needed to be able to fit all attorneys in the form.
-        $totalAttorneys = count($this->lpa->document->primaryAttorneys) + count($this->lpa->document->replacementAttorneys);
-        if($this->hasTrustCorporation()) {
-            $totalHumanAttorneys = $totalAttorneys - 1;
-        }
-        else {
-            $totalHumanAttorneys = $totalAttorneys;
+        //  Get the number of total number of human attorneys
+        $totalHumanAttorneys = count($this->getAllAttorneys());
+
+        if ($this->hasTrustAttorney()) {
+            $totalHumanAttorneys--;
         }
 
         if( $totalHumanAttorneys > 4 ) {
@@ -197,36 +197,4 @@ class Lp1f extends Lp1
             $this->mergerIntermediateFilePaths($generatedAdditionalAttorneySignaturePages);
         }
     }
-
-    /**
-     * get trust corporation object from lpa object or from primary attorneys or replacement attorneys array.
-     *
-     * @param string $attorneys
-     * @return \Opg\Lpa\DataModel\Lpa\Document\Attorneys\TrustCorporation|NULL
-     */
-    protected function getTrustCorporation($attorneys=null)
-    {
-        if(null == $attorneys) {
-            foreach($this->lpa->document->primaryAttorneys as $attorney) {
-                if($attorney instanceof TrustCorporation) {
-                    return $attorney;
-                }
-            }
-
-            foreach($this->lpa->document->replacementAttorneys as $attorney) {
-                if($attorney instanceof TrustCorporation) {
-                    return $attorney;
-                }
-            }
-        }
-        else {
-            foreach($attorneys as $attorney) {
-                if($attorney instanceof TrustCorporation) {
-                    return $attorney;
-                }
-            }
-        }
-
-        return null;
-    }
-} // class
+}

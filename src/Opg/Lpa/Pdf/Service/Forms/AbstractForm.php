@@ -12,14 +12,14 @@ use Opg\Lpa\Pdf\Service\PdftkInstance;
 abstract class AbstractForm
 {
     const CHECK_BOX_ON = 'On';
-    
+
     const CROSS_LINE_WIDTH = 10;
-    
+
     const CONTENT_TYPE_ATTORNEY_DECISIONS           = 'decisions';
     const CONTENT_TYPE_REPLACEMENT_ATTORNEY_STEP_IN = 'how-replacement-attorneys-step-in';
     const CONTENT_TYPE_PREFERENCES                  = 'preferences';
     const CONTENT_TYPE_INSTRUCTIONS                 = 'instructions';
-    
+
     /**
      *
      * @var LPA model object
@@ -28,47 +28,47 @@ abstract class AbstractForm
 
     /**
      * Data to be populated into PDF form elements.
-     * 
+     *
      * @var array
      */
     protected $pdfFormData = [];
-    
+
     /**
      * The path of the pdf file to be generated.
      * @var string
      */
     protected $generatedPdfFilePath = null;
-    
+
     /**
      * Storage path for intermediate pdf files - needed for LP1F/H and LP3.
      * @var array
      */
     protected $interFileStack = array();
-    
+
     /**
-     * It's a ram disk folder and is the base path for storing 
+     * It's a ram disk folder and is the base path for storing
      * intermediate files temporarily. Defined in config file.
      * @var string
      */
     protected $intermediateFileBasePath;
-    
+
     /**
      * The folder that stores template PDFs which all form elements values are empty.
      * @var string
      */
     protected $pdfTemplatePath;
-    
+
     /**
      * Store cross line strokes parameters.
-     * The array index is the page number of pdf document, 
+     * The array index is the page number of pdf document,
      * and value is array of cross line param keys.
-     * 
+     *
      * @var array
      */
     protected $drawingTargets = array();
-    
+
     /**
-     * bx - bottom x 
+     * bx - bottom x
      * by - bottom y
      * tx - top x
      * ty - top y
@@ -117,9 +117,9 @@ abstract class AbstractForm
         'lp3-primaryAttorney-2'            => array('bx'=>43,  'by'=>242, 'tx'=>283, 'ty'=>386),
         'lp3-primaryAttorney-3'            => array('bx'=>312, 'by'=>242, 'tx'=>552, 'ty'=>386)
     );
-    
+
     abstract protected function generate();
-    
+
     public function __construct(Lpa $lpa)
     {
         $this->lpa = $lpa;
@@ -150,12 +150,12 @@ abstract class AbstractForm
     {
         return $this->generatedPdfFilePath;
     }
-    
+
     public function getPdfObject()
     {
         return $this->pdf;
     }
-    
+
     /**
      * helper function - get fullname for a person
      * @param Opg\Lpa\DataModel\Lpa\Elements\Name $personName
@@ -163,9 +163,9 @@ abstract class AbstractForm
      */
     protected function fullName(Name $personName)
     {
-        return $personName->title . ' '. $personName->first . ' '. $personName->last; 
+        return $personName->title . ' '. $personName->first . ' '. $personName->last;
     }
-    
+
     /**
      * Count no of generated intermediate files
      * @return number
@@ -181,12 +181,12 @@ abstract class AbstractForm
                 $count++;
             }
         }
-        
+
         return $count;
     } // function countIntermediateFiles()
-    
+
     /**
-     * 
+     *
      * @param string $fileType
      * @return string
      */
@@ -195,7 +195,7 @@ abstract class AbstractForm
         $filePath = $this->intermediateFileBasePath.'/'.$fileType.'-'.str_replace(array(' ','.'), '-', Formatter::id($this->lpa->id).'-'.microtime(true)).'.pdf';
         return $filePath;
     } // function getTmpFilePath($fileType)
-    
+
     /**
      * Register a temp file in self::$interFileStack
      * @param string $fileType
@@ -210,10 +210,10 @@ abstract class AbstractForm
         else {
             $this->interFileStack[$fileType][] = $path;
         }
-        
+
         return $path;
     } // function registerTempFile()
-    
+
     /**
      * Draw cross lines
      * @param string $filePath
@@ -234,11 +234,11 @@ abstract class AbstractForm
                 );
             }
         } // foreach
-    
+
         $pdf->save($filePath);
-    
+
     } // function drawCrossLines()
-    
+
     /**
      * Convert all new lines with spaces to fill out to the end of each line
      *
@@ -248,7 +248,7 @@ abstract class AbstractForm
     protected function flattenTextContent($content)
     {
         $content = $this->linewrap(trim($content), Lp1::BOX_CHARS_PER_ROW);
-        
+
         $paragraphs = explode("\r\n", $content);
         $lines = count($paragraphs);
         for($i=0; $i<$lines; $i++) {
@@ -266,14 +266,14 @@ abstract class AbstractForm
                 }
             }
         }
-        
+
         return implode("\r\n", $paragraphs);
     } // function flattenBoxContent($content)
-    
+
     protected function mergerIntermediateFilePaths($paths)
     {
         if(empty($paths)) return;
-        
+
         foreach($paths as $type=>$path) {
             if(isset($this->interFileStack[$type])) {
                 $this->interFileStack[$type] = array_merge($this->interFileStack[$type], $path);
@@ -283,10 +283,10 @@ abstract class AbstractForm
             }
         }
     } // function mergerIntermediateFilePaths()
-    
+
     /**
      * Get content for a multiline text box.
-     * 
+     *
      * @param int $pageNo
      * @param string $content - user input content for preference/instruction/decisions/step-in
      * @param enum $contentType - CONTENT_TYPE_ATTORNEY_DECISIONS | CONTENT_TYPE_REPLACEMENT_ATTORNEY_STEP_IN | CONTENT_TYPE_PREFERENCES | CONTENT_TYPE_INSTRUCTIONS
@@ -295,14 +295,14 @@ abstract class AbstractForm
     protected function getContentForBox($pageNo, $content, $contentType)
     {
         $flattenContent = $this->flattenTextContent($content);
-        
+
         // return content for preference or instruction in section 7.
         if(($contentType==self::CONTENT_TYPE_INSTRUCTIONS) || ($contentType==self::CONTENT_TYPE_PREFERENCES)) {
             if($pageNo == 0) {
                 return "\r\n".substr($flattenContent, 0, (Lp1::BOX_CHARS_PER_ROW + 2) * Lp1::BOX_NO_OF_ROWS);
             }
             else {
-                $chunks = str_split(substr($flattenContent, (Lp1::BOX_CHARS_PER_ROW + 2) * Lp1::BOX_NO_OF_ROWS), (Lp1::BOX_CHARS_PER_ROW + 2) * Cs2::BOX_NO_OF_ROWS_CS2);
+                $chunks = str_split(substr($flattenContent, (Lp1::BOX_CHARS_PER_ROW + 2) * Lp1::BOX_NO_OF_ROWS), (Lp1::BOX_CHARS_PER_ROW + 2) * AbstractCs2::BOX_NO_OF_ROWS_CS2);
                 if(isset($chunks[$pageNo-1])) {
                     return "\r\n".$chunks[$pageNo-1];
                 }
@@ -312,7 +312,7 @@ abstract class AbstractForm
             }
         }
         else {
-            $chunks = str_split($flattenContent, (Lp1::BOX_CHARS_PER_ROW + 2)* Cs2::BOX_NO_OF_ROWS_CS2);
+            $chunks = str_split($flattenContent, (Lp1::BOX_CHARS_PER_ROW + 2)* AbstractCs2::BOX_NO_OF_ROWS_CS2);
             if(isset($chunks[$pageNo])) {
                 return "\r\n".$chunks[$pageNo];
             }
@@ -320,8 +320,8 @@ abstract class AbstractForm
                 return null;
             }
         }
-    } // function getContentForBox()
-    
+    }
+
     /**
      * Check if the text content can fit into the text box in the Section 7 page in the base PDF form.
      *
@@ -332,13 +332,13 @@ abstract class AbstractForm
         $flattenContent = $this->flattenTextContent($content);
         return strlen($flattenContent) <= (Lp1::BOX_CHARS_PER_ROW + 2) * Lp1::BOX_NO_OF_ROWS;
     } // function canFitIntoTextBox()
-    
+
     public function cleanup()
     {
         if(\file_exists($this->generatedPdfFilePath)) {
             unlink($this->generatedPdfFilePath);
         }
-        
+
         // remove all generated intermediate pdf files
         foreach($this->interFileStack as $type => $paths) {
             if(is_string($paths)) {
@@ -354,16 +354,16 @@ abstract class AbstractForm
                 }
             }
         }
-        
+
     }
-    
+
     protected function nextTag($tag)
     {
         $cols = str_split(strrev($tag), 1);
         for($i=0; $i<count($cols); $i++) {
             if($cols[$i] == 'Z') {
                 $cols[$i] = 'A';
-                
+
                 if($i == count($cols) - 1) {
                     return 'A'.strrev(implode('', $cols));
                 }
@@ -373,11 +373,11 @@ abstract class AbstractForm
                 break;
             }
         }
-        
+
         return strrev(implode('', $cols));
     }
-    
-    
+
+
     protected function linewrap($string, $width, $break="\r\n", $cut=false)
     {
         $array = explode("\r\n", $string);
@@ -388,7 +388,7 @@ abstract class AbstractForm
         }
         return $string;
     }
-    
+
     /**
      * clean up intermediate files.
      */

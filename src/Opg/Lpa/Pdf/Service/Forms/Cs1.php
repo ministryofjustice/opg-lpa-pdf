@@ -2,7 +2,6 @@
 
 namespace Opg\Lpa\Pdf\Service\Forms;
 
-use Opg\Lpa\DataModel\Lpa\Lpa;
 use Opg\Lpa\DataModel\Lpa\Document\Document;
 use Opg\Lpa\DataModel\Lpa\Elements\Name;
 use Opg\Lpa\DataModel\Lpa\Elements\EmailAddress;
@@ -26,27 +25,7 @@ class Cs1 extends AbstractCsForm
     protected $pdfTemplateFilename = 'LPC_Continuation_Sheet_1.pdf';
 
     /**
-     * Array of actor types to process
-     *
-     * @var array
-     */
-    private $actorTypes;
-
-    /**
-     * Constructor
-     *
-     * @param Lpa $lpa
-     * @param array $actorTypes
-     */
-    public function __construct(Lpa $lpa, array $actorTypes)
-    {
-        parent::__construct($lpa);
-
-        $this->actorTypes = $actorTypes;
-    }
-
-    /**
-     * Generate the correct number of continuation sheets
+     * Generate the required continuation sheet(s)
      *
      * @return array
      */
@@ -55,7 +34,7 @@ class Cs1 extends AbstractCsForm
         $this->logStartMessage();
 
         //  Define a mapping for the actor type to the number of actors allowed on the standard form
-        $maxSlotsOnStandardForm = [
+        $actorTypesMaxCounts = [
             'primaryAttorneys'     => Lp1::MAX_ATTORNEYS_ON_STANDARD_FORM,
             'replacementAttorneys' => Lp1::MAX_REPLACEMENT_ATTORNEYS_ON_STANDARD_FORM,
             'peopleToNotify'       => Lp1::MAX_PEOPLE_TO_NOTIFY_ON_STANDARD_FORM
@@ -64,21 +43,23 @@ class Cs1 extends AbstractCsForm
         $additionalActors = [];
 
         //  Loop through the actor types, obtain the details from the LPA data and determine how many "additional" parties there are
-        foreach ($this->actorTypes as $actorType) {
-            //  Get the required actors from the LPA data
+        foreach ($actorTypesMaxCounts as $actorType => $actorTypeMaxCount) {
+            //  Get the required actors from the LPA data and the max number of actors on the standard LPA pages
             $actors = $this->lpa->document->$actorType;
 
+            //  If the number of actors is not above the maximum then move to the next actor type
+            if (count($actors) <= $actorTypeMaxCount) {
+                continue;
+            }
+
             //  If this is a P&F LPA and this is one of the list of attorneys, sort the data so that the trust is first
-            if ($this->lpa->document->type == Document::LPA_TYPE_PF && $actorType != 'peopleToNotify') {
+            if ($this->lpa->document->type == Document::LPA_TYPE_PF && in_array($actorType, ['primaryAttorneys', 'replacementAttorneys'])) {
                 $actors = $this->sortAttorneys($actorType);
             }
 
             sort($actors);
 
-            //  For any number of actors more than the standard amount allowed add them to the additional actors page
-            $startingIndexForThisActorGroup = $maxSlotsOnStandardForm[$actorType];
-
-            for ($i = $startingIndexForThisActorGroup; $i < count($actors); $i++) {
+            for ($i = $actorTypeMaxCount; $i < count($actors); $i++) {
                 $additionalActors[] = [
                     'person' => $actors[$i],
                     'type'   => $actorType
@@ -86,11 +67,7 @@ class Cs1 extends AbstractCsForm
             }
         }
 
-        //  If there are no additional actors to consider then exit early
-        if (empty($additionalActors)) {
-            return;
-        }
-
+        //  Loop through the additional actors and generate the required PDFs
         foreach ($additionalActors as $idx => $additionalActor) {
             $pIdx = ($idx % 2);
 

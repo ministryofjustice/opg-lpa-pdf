@@ -19,7 +19,7 @@ class Cs3 extends AbstractCsForm
     protected $pdfTemplateFilename = 'LPC_Continuation_Sheet_3.pdf';
 
     /**
-     * Generate the correct number of continuation sheets
+     * Generate the required continuation sheet(s)
      *
      * @return array
      */

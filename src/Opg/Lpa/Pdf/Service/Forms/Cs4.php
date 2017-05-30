@@ -2,10 +2,12 @@
 
 namespace Opg\Lpa\Pdf\Service\Forms;
 
-use Opg\Lpa\DataModel\Lpa\Lpa;
+use Opg\Lpa\DataModel\Lpa\Document\Attorneys\TrustCorporation;
 
 class Cs4 extends AbstractCsForm
 {
+    use AttorneysTrait;
+
     /**
      * Short ref for this continuation sheet
      *
@@ -21,27 +23,7 @@ class Cs4 extends AbstractCsForm
     protected $pdfTemplateFilename = 'LPC_Continuation_Sheet_4.pdf';
 
     /**
-     * Company number of the trust
-     *
-     * @var
-     */
-    private $companyNumber;
-
-    /**
-     * Constructor
-     *
-     * @param Lpa $lpa
-     * @param $companyNumber
-     */
-    public function __construct(Lpa $lpa, $companyNumber)
-    {
-        parent::__construct($lpa);
-
-        $this->companyNumber = $companyNumber;
-    }
-
-    /**
-     * Generate the correct number of continuation sheets
+     * Generate the required continuation sheet(s)
      *
      * @return array
      */
@@ -49,7 +31,14 @@ class Cs4 extends AbstractCsForm
     {
         $this->logStartMessage();
 
-        $this->addFormData('cs4-trust-corporation-company-registration-number', $this->companyNumber)
+        //  Get the company number from the trust in the LPA
+        $trustAttorney = $this->getTrustAttorney();
+
+        if (!$trustAttorney instanceof TrustCorporation) {
+            new \RuntimeException('Trust attorney must be set to generate continuation sheet 4');
+        }
+
+        $this->addFormData('cs4-trust-corporation-company-registration-number', $trustAttorney->number)
              ->addFormData('cs4-footer-right', $this->getFooter());
 
         $filePath = $this->createContinuationSheetPdf();
