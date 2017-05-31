@@ -59,15 +59,6 @@ abstract class AbstractForm
     protected $pdfTemplatePath;
 
     /**
-     * Store cross line strokes parameters.
-     * The array index is the page number of pdf document,
-     * and value is array of cross line param keys.
-     *
-     * @var array
-     */
-    protected $drawingTargets = array();
-
-    /**
      * bx - bottom x
      * by - bottom y
      * tx - top x
@@ -110,8 +101,8 @@ abstract class AbstractForm
         'additional-applicant-1-pf'        => array('bx'=>308, 'by'=>319, 'tx'=>549, 'ty'=>417),
         'additional-applicant-2-pf'        => array('bx'=>42,  'by'=>155, 'tx'=>283, 'ty'=>253),
         'additional-applicant-3-pf'        => array('bx'=>308, 'by'=>155, 'tx'=>549, 'ty'=>253),
-        'correspondent-empty-address'      => array('bx'=>42, 'by'=>362, 'tx'=>284, 'ty'=>433),
-        'correspondent-empty-name-address' => array('bx'=>42, 'by'=>362, 'tx'=>413, 'ty'=>565),
+        'correspondent-empty-address'      => array('bx'=>42,  'by'=>362, 'tx'=>284, 'ty'=>433),
+        'correspondent-empty-name-address' => array('bx'=>42,  'by'=>362, 'tx'=>413, 'ty'=>565),
         'cs1'                              => array('bx'=>313, 'by'=>262, 'tx'=>558, 'ty'=>645),
         'lp3-primaryAttorney-1'            => array('bx'=>312, 'by'=>458, 'tx'=>552, 'ty'=>602),
         'lp3-primaryAttorney-2'            => array('bx'=>43,  'by'=>242, 'tx'=>283, 'ty'=>386),
@@ -272,17 +263,18 @@ abstract class AbstractForm
 
     protected function mergerIntermediateFilePaths($paths)
     {
-        if(empty($paths)) return;
+        if (empty($paths)) {
+            return;
+        }
 
-        foreach($paths as $type=>$path) {
-            if(isset($this->interFileStack[$type])) {
+        foreach ($paths as $type => $path) {
+            if (isset($this->interFileStack[$type])) {
                 $this->interFileStack[$type] = array_merge($this->interFileStack[$type], $path);
-            }
-            else {
+            } else {
                 $this->interFileStack[$type] = $path;
             }
         }
-    } // function mergerIntermediateFilePaths()
+    }
 
     /**
      * Get content for a multiline text box.
