@@ -14,8 +14,6 @@ class Cs2Instructions extends AbstractCs2
         $this->contentType = Lp1::CONTENT_TYPE_INSTRUCTIONS;
         $this->content = $this->lpa->document->instruction;
 
-        //  TODO - Refactor to bring any logic into here?
-
         return parent::generate();
     }
 }

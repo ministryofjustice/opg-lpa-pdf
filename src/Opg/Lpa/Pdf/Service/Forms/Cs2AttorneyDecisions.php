@@ -14,8 +14,6 @@ class Cs2AttorneyDecisions extends AbstractCs2
         $this->contentType = Lp1::CONTENT_TYPE_ATTORNEY_DECISIONS;
         $this->content = $this->lpa->document->primaryAttorneyDecisions->howDetails;
 
-        //  TODO - Refactor to bring any logic into here?
-
         return parent::generate();
     }
 }

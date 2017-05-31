@@ -14,8 +14,6 @@ class Cs2Preferences extends AbstractCs2
         $this->contentType = Lp1::CONTENT_TYPE_PREFERENCES;
         $this->content = $this->lpa->document->preference;
 
-        //  TODO - Refactor to bring any logic into here?
-
         return parent::generate();
     }
 }
