@@ -56,6 +56,11 @@ class Dob extends AbstractData
                 if (is_string($v)) {
                     //  Split the array into components
                     $dateArr = explode('-', $v);
+                    $timeArr = array('00', '00', '00.000000+0000');
+                    $timeIndex = strpos($v, 'T');
+                    if ($timeIndex) {
+                        $timeArr = explode(':', substr($v, $timeIndex + 1));
+                    }
 
                     if (count($dateArr) == 3) {
                         //  Truncate the day value to lose any time data and try to create a DateTime object
@@ -69,9 +74,9 @@ class Dob extends AbstractData
                         $dateArr[0] = ltrim($dateArr[0], '0');
 
                         //  Format the string and date to the same format to ensure that it is valid
-                        $dateFormat = 'Y-m-d';
-                        $dateIn = implode('-', $dateArr);
-                        $date = DateTime::createFromFormat('Y-m-d', $dateIn);
+                        $dateFormat = 'Y-m-d H:i:s.uO';
+                        $dateIn = implode('-', $dateArr) . ' ' . implode(':', $timeArr);
+                        $date = DateTime::createFromFormat($dateFormat, $dateIn);
 
                         if ($date instanceof DateTime && strpos($dateIn, $date->format($dateFormat)) === 0) {
                             return $date;
