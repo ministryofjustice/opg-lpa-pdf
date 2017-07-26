@@ -1,15 +1,15 @@
-FROM registry.service.opg.digital/opguk/base:0.1.213
+FROM registry.service.opg.digital/opg-base-1604
 
 RUN groupadd supervisor
 
 RUN apt-get update && apt-get install -y \
-    php5-cli php5-dev pdftk php5-mcrypt php5-curl
+    make php-cli php-dev pdftk php-mcrypt php-curl php-pear
 
-RUN php5enmod mcrypt
+RUN phpenmod mcrypt
 
 RUN pecl install proctitle-0.1.2 && \
-    echo "extension=proctitle.so" > /etc/php5/mods-available/proctitle.ini && \
-    php5enmod proctitle
+    echo "extension=proctitle.so" > /etc/php/7.0/mods-available/proctitle.ini && \
+    phpenmod proctitle
 
 # Add application logging config(s)
 ADD docker/beaver.d /etc/beaver.d
