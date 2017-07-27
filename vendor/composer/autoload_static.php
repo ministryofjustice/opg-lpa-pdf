@@ -11,8 +11,8 @@ class ComposerStaticInitf16902dd85272873c41381a1e27c3546
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '185c4e929cdca231b7544ab54e07fde3' => __DIR__ . '/..' . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/functions.php',
         '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
+        'f94b0e5d3d7b3e8d4ef0ace6faee4c57' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/functions.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'be01b9b16925dcb22165c40b46681ac6' => __DIR__ . '/..' . '/wp-cli/php-cli-tools/lib/cli/cli.php',
         '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
@@ -49,7 +49,9 @@ class ComposerStaticInitf16902dd85272873c41381a1e27c3546
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\Validator\\' => 28,
             'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Intl\\' => 23,
         ),
         'P' => 
         array (
@@ -162,9 +164,17 @@ class ComposerStaticInitf16902dd85272873c41381a1e27c3546
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
+        'Symfony\\Component\\Validator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/validator',
+        ),
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'Symfony\\Component\\Intl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/intl',
         ),
         'Psr\\Log\\' => 
         array (
@@ -255,17 +265,6 @@ class ComposerStaticInitf16902dd85272873c41381a1e27c3546
                 0 => __DIR__ . '/..' . '/zendframework/zendpdf/library',
             ),
         ),
-        'S' => 
-        array (
-            'Symfony\\Component\\Validator\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/symfony/validator',
-            ),
-            'Symfony\\Component\\Intl\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/symfony/intl',
-            ),
-        ),
         'R' => 
         array (
             'Raven_' => 
@@ -297,13 +296,13 @@ class ComposerStaticInitf16902dd85272873c41381a1e27c3546
     );
 
     public static $classMap = array (
-        'Collator' => __DIR__ . '/..' . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/Collator.php',
+        'Collator' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/Collator.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
-        'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
-        'Locale' => __DIR__ . '/..' . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/Locale.php',
-        'NumberFormatter' => __DIR__ . '/..' . '/symfony/intl/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+        'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/IntlDateFormatter.php',
+        'Locale' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/Locale.php',
+        'NumberFormatter' => __DIR__ . '/..' . '/symfony/intl/Resources/stubs/NumberFormatter.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

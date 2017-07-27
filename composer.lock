@@ -523,24 +523,24 @@
         },
         {
             "name": "ministryofjustice/opg-lpa-datamodels",
-            "version": "4.0.3",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ministryofjustice/opg-lpa-datamodels.git",
-                "reference": "0c0e41cc75a9573ff74f1913755ddc9756bae509"
+                "reference": "7443b11e285d352f64181383e7319fa10bcd43d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/0c0e41cc75a9573ff74f1913755ddc9756bae509",
-                "reference": "0c0e41cc75a9573ff74f1913755ddc9756bae509",
+                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/7443b11e285d352f64181383e7319fa10bcd43d0",
+                "reference": "7443b11e285d352f64181383e7319fa10bcd43d0",
                 "shasum": ""
             },
             "require": {
                 "egulias/email-validator": "1.2.*",
                 "mongodb/mongodb": "^1.1",
-                "php": ">=5.5.9",
-                "symfony/intl": "2.6.*",
-                "symfony/validator": "2.6.*"
+                "php": ">=7.0.18",
+                "symfony/intl": "2.7.*",
+                "symfony/validator": "2.7.*"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.0"
@@ -556,10 +556,10 @@
             ],
             "description": "PHP data models that represent a Lasting Power of Attorney",
             "support": {
-                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/4.0.3",
+                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/4.0.1",
                 "issues": "https://github.com/ministryofjustice/opg-lpa-datamodels/issues"
             },
-            "time": "2017-08-02T10:43:06+00:00"
+            "time": "2017-07-24T16:23:19+00:00"
         },
         {
             "name": "ministryofjustice/opg-lpa-logger",
@@ -1034,25 +1034,23 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v2.6.13",
-            "target-dir": "Symfony/Component/Intl",
+            "version": "v2.7.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
-                "reference": "4e2720da07bb0731064aaaa7ad854e5b23908ce6"
+                "reference": "00a9db7f9a9af7aff58711af1be154ab47eaccf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/intl/zipball/4e2720da07bb0731064aaaa7ad854e5b23908ce6",
-                "reference": "4e2720da07bb0731064aaaa7ad854e5b23908ce6",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/00a9db7f9a9af7aff58711af1be154ab47eaccf0",
+                "reference": "00a9db7f9a9af7aff58711af1be154ab47eaccf0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
             },
             "require-dev": {
-                "symfony/filesystem": ">=2.1",
-                "symfony/phpunit-bridge": "~2.7"
+                "symfony/filesystem": "~2.1"
             },
             "suggest": {
                 "ext-intl": "to use the component with locales other than \"en\""
@@ -1060,18 +1058,21 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Intl\\": ""
                 },
                 "classmap": [
-                    "Symfony/Component/Intl/Resources/stubs"
+                    "Resources/stubs"
                 ],
                 "files": [
-                    "Symfony/Component/Intl/Resources/stubs/functions.php"
+                    "Resources/stubs/functions.php"
+                ],
+                "exclude-from-classmap": [
+                    "/Tests/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1106,7 +1107,7 @@
                 "l10n",
                 "localization"
             ],
-            "time": "2015-07-23T02:17:26+00:00"
+            "time": "2017-06-01T20:44:56+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1233,35 +1234,33 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v2.6.13",
-            "target-dir": "Symfony/Component/Validator",
+            "version": "v2.7.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "fccfab79928e612eedca96dcf3a9e8efd2ee495f"
+                "reference": "9a1d6f9e6c07a120f824158745473f7070e2704a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/fccfab79928e612eedca96dcf3a9e8efd2ee495f",
-                "reference": "fccfab79928e612eedca96dcf3a9e8efd2ee495f",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/9a1d6f9e6c07a120f824158745473f7070e2704a",
+                "reference": "9a1d6f9e6c07a120f824158745473f7070e2704a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "symfony/translation": "~2.0,>=2.0.5"
+                "php": ">=5.3.9",
+                "symfony/translation": "~2.4"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "doctrine/cache": "~1.0",
                 "doctrine/common": "~2.3",
-                "egulias/email-validator": "~1.2,>=1.2.1",
+                "egulias/email-validator": "^1.2.1",
                 "symfony/config": "~2.2",
                 "symfony/expression-language": "~2.4",
-                "symfony/http-foundation": "~2.1",
-                "symfony/intl": "~2.3",
-                "symfony/phpunit-bridge": "~2.7",
+                "symfony/http-foundation": "~2.3",
+                "symfony/intl": "~2.7.25|^2.8.18",
                 "symfony/property-access": "~2.3",
-                "symfony/yaml": "~2.0,>=2.0.5"
+                "symfony/yaml": "^2.0.5"
             },
             "suggest": {
                 "doctrine/annotations": "For using the annotation mapping. You will also need doctrine/cache.",
@@ -1277,13 +1276,16 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Validator\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1301,7 +1303,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-01T19:58:06+00:00"
+            "time": "2017-07-03T07:38:34+00:00"
         },
         {
             "name": "wp-cli/php-cli-tools",
