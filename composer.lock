@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.32.0",
+            "version": "3.32.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3cd5606efca95480a17b0f9d0f21190cd25cef77"
+                "reference": "ca8791495696a1620fe2275df4983d063627aba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3cd5606efca95480a17b0f9d0f21190cd25cef77",
-                "reference": "3cd5606efca95480a17b0f9d0f21190cd25cef77",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ca8791495696a1620fe2275df4983d063627aba7",
+                "reference": "ca8791495696a1620fe2275df4983d063627aba7",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-07-26T22:05:53+00:00"
+            "time": "2017-07-27T19:46:08+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -527,12 +527,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ministryofjustice/opg-lpa-datamodels.git",
-                "reference": "7443b11e285d352f64181383e7319fa10bcd43d0"
+                "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/7443b11e285d352f64181383e7319fa10bcd43d0",
-                "reference": "7443b11e285d352f64181383e7319fa10bcd43d0",
+                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
+                "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
                 "shasum": ""
             },
             "require": {

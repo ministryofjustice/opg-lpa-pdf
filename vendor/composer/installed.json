@@ -2199,88 +2199,6 @@
         ]
     },
     {
-        "name": "aws/aws-sdk-php",
-        "version": "3.32.0",
-        "version_normalized": "3.32.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/aws/aws-sdk-php.git",
-            "reference": "3cd5606efca95480a17b0f9d0f21190cd25cef77"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3cd5606efca95480a17b0f9d0f21190cd25cef77",
-            "reference": "3cd5606efca95480a17b0f9d0f21190cd25cef77",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
-            "guzzlehttp/promises": "~1.0",
-            "guzzlehttp/psr7": "^1.4.1",
-            "mtdowling/jmespath.php": "~2.2",
-            "php": ">=5.5"
-        },
-        "require-dev": {
-            "andrewsville/php-token-reflection": "^1.4",
-            "aws/aws-php-sns-message-validator": "~1.0",
-            "behat/behat": "~3.0",
-            "doctrine/cache": "~1.4",
-            "ext-dom": "*",
-            "ext-json": "*",
-            "ext-openssl": "*",
-            "ext-pcre": "*",
-            "ext-simplexml": "*",
-            "ext-spl": "*",
-            "nette/neon": "^2.3",
-            "phpunit/phpunit": "^4.8.35|^5.4.0",
-            "psr/cache": "^1.0"
-        },
-        "suggest": {
-            "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
-            "doctrine/cache": "To use the DoctrineCacheAdapter",
-            "ext-curl": "To send requests using cURL",
-            "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
-        },
-        "time": "2017-07-26T22:05:53+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Aws\\": "src/"
-            },
-            "files": [
-                "src/functions.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Amazon Web Services",
-                "homepage": "http://aws.amazon.com"
-            }
-        ],
-        "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
-        "homepage": "http://aws.amazon.com/sdkforphp",
-        "keywords": [
-            "amazon",
-            "aws",
-            "cloud",
-            "dynamodb",
-            "ec2",
-            "glacier",
-            "s3",
-            "sdk"
-        ]
-    },
-    {
         "name": "symfony/yaml",
         "version": "v3.3.5",
         "version_normalized": "3.3.5.0",
@@ -3102,12 +3020,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/ministryofjustice/opg-lpa-datamodels.git",
-            "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5"
+            "reference": "a519e60293162db8e71fb35890962cb038710794"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
-            "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
+            "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/a519e60293162db8e71fb35890962cb038710794",
+            "reference": "a519e60293162db8e71fb35890962cb038710794",
             "shasum": ""
         },
         "require": {
@@ -3136,5 +3054,87 @@
             "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/4.0.2",
             "issues": "https://github.com/ministryofjustice/opg-lpa-datamodels/issues"
         }
+    },
+    {
+        "name": "aws/aws-sdk-php",
+        "version": "3.32.1",
+        "version_normalized": "3.32.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/aws/aws-sdk-php.git",
+            "reference": "ca8791495696a1620fe2275df4983d063627aba7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ca8791495696a1620fe2275df4983d063627aba7",
+            "reference": "ca8791495696a1620fe2275df4983d063627aba7",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
+            "guzzlehttp/promises": "~1.0",
+            "guzzlehttp/psr7": "^1.4.1",
+            "mtdowling/jmespath.php": "~2.2",
+            "php": ">=5.5"
+        },
+        "require-dev": {
+            "andrewsville/php-token-reflection": "^1.4",
+            "aws/aws-php-sns-message-validator": "~1.0",
+            "behat/behat": "~3.0",
+            "doctrine/cache": "~1.4",
+            "ext-dom": "*",
+            "ext-json": "*",
+            "ext-openssl": "*",
+            "ext-pcre": "*",
+            "ext-simplexml": "*",
+            "ext-spl": "*",
+            "nette/neon": "^2.3",
+            "phpunit/phpunit": "^4.8.35|^5.4.0",
+            "psr/cache": "^1.0"
+        },
+        "suggest": {
+            "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+            "doctrine/cache": "To use the DoctrineCacheAdapter",
+            "ext-curl": "To send requests using cURL",
+            "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
+        },
+        "time": "2017-07-27T19:46:08+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Aws\\": "src/"
+            },
+            "files": [
+                "src/functions.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Amazon Web Services",
+                "homepage": "http://aws.amazon.com"
+            }
+        ],
+        "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+        "homepage": "http://aws.amazon.com/sdkforphp",
+        "keywords": [
+            "amazon",
+            "aws",
+            "cloud",
+            "dynamodb",
+            "ec2",
+            "glacier",
+            "s3",
+            "sdk"
+        ]
     }
 ]
