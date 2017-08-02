@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3868c4b84834b1ff598ceb281438cd0c",
+    "content-hash": "6177f760936997f999c33a5d200c64ad",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.32.1",
+            "version": "3.32.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "ca8791495696a1620fe2275df4983d063627aba7"
+                "reference": "d34a5779803ae7bc3efd3c6cab6e4e6f3b7409dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ca8791495696a1620fe2275df4983d063627aba7",
-                "reference": "ca8791495696a1620fe2275df4983d063627aba7",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d34a5779803ae7bc3efd3c6cab6e4e6f3b7409dd",
+                "reference": "d34a5779803ae7bc3efd3c6cab6e4e6f3b7409dd",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-07-27T19:46:08+00:00"
+            "time": "2017-08-01T21:51:56+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -523,16 +523,16 @@
         },
         {
             "name": "ministryofjustice/opg-lpa-datamodels",
-            "version": "4.0.1",
+            "version": "5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ministryofjustice/opg-lpa-datamodels.git",
-                "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5"
+                "reference": "cae6b8e68a4cc4d61bea95ab06572a70a2e54a87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
-                "reference": "d98d5ff4019c5d25c2aa05d3bb4ce9fdc80228c5",
+                "url": "https://api.github.com/repos/ministryofjustice/opg-lpa-datamodels/zipball/cae6b8e68a4cc4d61bea95ab06572a70a2e54a87",
+                "reference": "cae6b8e68a4cc4d61bea95ab06572a70a2e54a87",
                 "shasum": ""
             },
             "require": {
@@ -556,10 +556,10 @@
             ],
             "description": "PHP data models that represent a Lasting Power of Attorney",
             "support": {
-                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/4.0.1",
+                "source": "https://github.com/ministryofjustice/opg-lpa-datamodels/tree/5.0.0",
                 "issues": "https://github.com/ministryofjustice/opg-lpa-datamodels/issues"
             },
-            "time": "2017-07-24T16:23:19+00:00"
+            "time": "2017-08-02T11:46:31+00:00"
         },
         {
             "name": "ministryofjustice/opg-lpa-logger",
@@ -1034,7 +1034,7 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v2.7.32",
+            "version": "v2.7.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
@@ -1170,7 +1170,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v2.8.25",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
@@ -1234,16 +1234,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v2.7.32",
+            "version": "v2.7.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "9a1d6f9e6c07a120f824158745473f7070e2704a"
+                "reference": "1ba29ea97b88ffccfe431c442ef4b601f3c5b8fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/9a1d6f9e6c07a120f824158745473f7070e2704a",
-                "reference": "9a1d6f9e6c07a120f824158745473f7070e2704a",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/1ba29ea97b88ffccfe431c442ef4b601f3c5b8fb",
+                "reference": "1ba29ea97b88ffccfe431c442ef4b601f3c5b8fb",
                 "shasum": ""
             },
             "require": {
@@ -1303,7 +1303,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-03T07:38:34+00:00"
+            "time": "2017-07-22T07:54:37+00:00"
         },
         {
             "name": "wp-cli/php-cli-tools",
@@ -2924,16 +2924,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "1f93a8d19b8241617f5074a123e282575b821df8"
+                "reference": "ddc23324e6cfe066f3dd34a37ff494fa80b617ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/1f93a8d19b8241617f5074a123e282575b821df8",
-                "reference": "1f93a8d19b8241617f5074a123e282575b821df8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/ddc23324e6cfe066f3dd34a37ff494fa80b617ed",
+                "reference": "ddc23324e6cfe066f3dd34a37ff494fa80b617ed",
                 "shasum": ""
             },
             "require": {
@@ -2975,7 +2975,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-15T12:58:50+00:00"
+            "time": "2017-07-23T12:43:26+00:00"
         },
         {
             "name": "webmozart/assert",
