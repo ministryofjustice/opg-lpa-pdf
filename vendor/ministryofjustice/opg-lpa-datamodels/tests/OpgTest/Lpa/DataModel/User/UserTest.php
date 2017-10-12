@@ -23,7 +23,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $validatorResponse = $name->validate();
         $this->assertTrue($validatorResponse->hasErrors());
         $errors = $validatorResponse->getArrayCopy();
-        $this->assertEquals(3, count($errors));
+        $this->assertEquals(4, count($errors));
         TestHelper::assertNoDuplicateErrorMessages($errors, $this);
         $this->assertNotNull($errors['id']);
         $this->assertNotNull($errors['createdAt']);
