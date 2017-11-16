@@ -156,7 +156,7 @@ class Generator implements GeneratorInterface {
             \mkdir($this->config['service']['assets']['template_path_on_ram_disk'], 0777, true);
         }
 
-        foreach(glob($this->config['service']['assets']['source_template_path'].'/*.pdf') as $pdf_source) {
+        foreach(glob($this->config['service']['assets']['source_template_path'].'/*.p*') as $pdf_source) {
             $pathInfo = pathinfo($pdf_source);
 
             if(!\file_exists($this->config['service']['assets']['template_path_on_ram_disk'].'/'.$pathInfo['basename'])) {

@@ -9,6 +9,7 @@ use Opg\Lpa\Pdf\Config\Config;
 use Opg\Lpa\Pdf\Logger\Logger;
 use ZendPdf\PdfDocument as ZendPdfDocument;
 use mikehaertl\pdftk\Pdf;
+use ZendPdf\Resource\Image\Png;
 
 abstract class AbstractForm
 {
@@ -233,16 +234,19 @@ abstract class AbstractForm
         }
 
         if (!$disableDrawCrossLines) {
-            // draw cross lines
+            $png = new Png($this->pdfTemplatePath."/cross_line.png");
+
+            // draw cross line image
             $pdf = ZendPdfDocument::load($filePath);
             foreach ($params as $pageNo => $blockNames) {
-                $page = $pdf->pages[$pageNo]->setLineWidth(self::CROSS_LINE_WIDTH);
+                $page = $pdf->pages[$pageNo];
                 foreach ($blockNames as $blockName) {
-                    $page->drawLine(
-                        $this->crossLineParams[$blockName]['bx'],
-                        $this->crossLineParams[$blockName]['by'],
-                        $this->crossLineParams[$blockName]['tx'],
-                        $this->crossLineParams[$blockName]['ty']
+                    $page->drawImage(
+                        $png,
+                        $this->crossLineParams[$blockName]['bx'] - 12,
+                        $this->crossLineParams[$blockName]['ty'] + 30,
+                        $this->crossLineParams[$blockName]['tx'] + 12,
+                        $this->crossLineParams[$blockName]['by'] - 34
                     );
                 }
             } // foreach
