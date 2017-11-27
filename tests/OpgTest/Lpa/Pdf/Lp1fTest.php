@@ -34,6 +34,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -131,7 +133,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -319,7 +321,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -346,6 +348,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -444,7 +448,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -624,7 +628,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -654,6 +658,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -719,7 +725,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -907,7 +913,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -934,6 +940,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -1032,7 +1040,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -1220,7 +1228,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -1252,6 +1260,9 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 'correspondent-empty-name-address',
             ],
+        ];
+
+        $blankTargets = [
             19 => [
                 'applicant-signature-1',
                 'applicant-signature-2',
@@ -1356,7 +1367,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -1520,7 +1531,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -1559,10 +1570,13 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 "correspondent-empty-name-address",
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-1",
-                "applicant-signature-2",
-                "applicant-signature-3",
+                'applicant-signature-1',
+                'applicant-signature-2',
+                'applicant-signature-3',
             ],
         ];
 
@@ -1611,7 +1625,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -1751,7 +1765,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -1787,8 +1801,11 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 "correspondent-empty-name-address",
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-3",
+                'applicant-signature-3',
             ],
         ];
 
@@ -1889,7 +1906,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -2058,7 +2075,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -2088,6 +2105,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 "correspondent-empty-name-address",
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -2166,7 +2185,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -2343,7 +2362,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -2375,6 +2394,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 "correspondent-empty-name-address",
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -2442,7 +2463,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -2608,7 +2629,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -2652,8 +2673,11 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 "correspondent-empty-name-address",
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-3",
+                'applicant-signature-3',
             ],
         ];
 
@@ -2701,7 +2725,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -2850,7 +2874,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -2899,9 +2923,12 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 'correspondent-empty-name-address',
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-2",
-                "applicant-signature-3",
+                'applicant-signature-2',
+                'applicant-signature-3',
             ],
         ];
 
@@ -2949,7 +2976,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -3078,7 +3105,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -3133,10 +3160,13 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 'correspondent-empty-name-address',
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-1",
-                "applicant-signature-2",
-                "applicant-signature-3",
+                'applicant-signature-1',
+                'applicant-signature-2',
+                'applicant-signature-3',
             ],
         ];
 
@@ -3184,7 +3214,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -3293,7 +3323,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -3359,10 +3389,13 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 'correspondent-empty-name-address',
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-1",
-                "applicant-signature-2",
-                "applicant-signature-3",
+                'applicant-signature-1',
+                'applicant-signature-2',
+                'applicant-signature-3',
             ],
         ];
 
@@ -3422,7 +3455,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -3519,7 +3552,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -3546,6 +3579,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -3644,7 +3679,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -3832,7 +3867,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -3862,6 +3897,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -3960,7 +3997,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -4139,7 +4176,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -4172,6 +4209,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -4269,7 +4308,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -4455,7 +4494,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -4482,6 +4521,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -4580,7 +4621,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -4768,7 +4809,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -4803,6 +4844,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -4900,7 +4943,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -5086,7 +5129,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -5121,6 +5164,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -5218,7 +5263,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -5404,7 +5449,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -5434,6 +5479,8 @@ class Lp1fTest extends AbstractPdfTestClass
         $templateFileName = 'LP1F.pdf';
 
         $strikeThroughs = [];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -5532,7 +5579,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -5722,7 +5769,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -5750,6 +5797,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -5848,7 +5897,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -6035,7 +6084,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -6077,10 +6126,13 @@ class Lp1fTest extends AbstractPdfTestClass
             17 => [
                 'correspondent-empty-name-address',
             ],
+        ];
+
+        $blankTargets = [
             19 => [
-                "applicant-signature-1",
-                "applicant-signature-2",
-                "applicant-signature-3",
+                'applicant-signature-1',
+                'applicant-signature-2',
+                'applicant-signature-3',
             ],
         ];
 
@@ -6129,7 +6181,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -6269,7 +6321,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -6304,6 +6356,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -6380,7 +6434,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -6556,7 +6610,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -6591,6 +6645,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -6668,7 +6724,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -6845,7 +6901,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -6873,6 +6929,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -6970,7 +7028,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -7158,7 +7216,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -7185,6 +7243,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -7282,7 +7342,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -7469,7 +7529,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -7498,6 +7558,8 @@ class Lp1fTest extends AbstractPdfTestClass
             ],
         ];
 
+        $blankTargets = [];
+
         $constituentPdfs = [
             'start' => [
                 $this->getFullTemplatePath('LP1F_CoversheetRegistration.pdf'),
@@ -7595,7 +7657,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -7783,7 +7845,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
@@ -7811,6 +7873,8 @@ class Lp1fTest extends AbstractPdfTestClass
                 'correspondent-empty-name-address',
             ],
         ];
+
+        $blankTargets = [];
 
         $constituentPdfs = [
             'start' => [
@@ -7911,7 +7975,7 @@ class Lp1fTest extends AbstractPdfTestClass
             'end' => [
                 [
                     'templateFileName' => 'LP1F.pdf',
-                    'strikeThroughTargets' => [
+                    'blankTargets' => [
                         19 => [
                             'applicant-signature-2',
                             'applicant-signature-3',
@@ -8101,7 +8165,7 @@ class Lp1fTest extends AbstractPdfTestClass
 
         $pageShift = 0;
 
-        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
+        $this->verifyExpectedPdfData($pdf, $templateFileName, $strikeThroughs, $blankTargets, $constituentPdfs, $data, $pageShift, $formattedLpaRef);
 
         //  Test the generated filename created
         $pdfFile = $pdf->generate();
