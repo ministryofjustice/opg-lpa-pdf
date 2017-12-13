@@ -13,23 +13,6 @@ use PHPUnit\Framework\TestCase;
 
 class StateCheckerTest extends TestCase
 {
-    public function testConstructor()
-    {
-        $lpa = FixturesData::getHwLpa();
-        $stateChecker = new StateChecker($lpa);
-        $this->assertTrue($lpa === $stateChecker->getLpa());
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage No LPA has been set
-     */
-    public function testConstructorNoLpa()
-    {
-        $stateChecker = new StateChecker(null);
-        $stateChecker->getLpa();
-    }
-
     public function testCanGenerateLP1()
     {
         $lpa = FixturesData::getHwLpa();
@@ -171,13 +154,6 @@ class StateCheckerTest extends TestCase
             ->set('how', AbstractDecisions::LPA_DECISION_HOW_JOINTLY_AND_SEVERALLY);
         $stateChecker = new TestableStateChecker($lpa);
         $this->assertTrue($stateChecker->testLpaHasFinishedCreation());
-    }
-
-    public function testLpaHasCreated()
-    {
-        $lpa = FixturesData::getHwLpa();
-        $stateChecker = new TestableStateChecker($lpa);
-        $this->assertTrue($stateChecker->testLpaHasCreated());
     }
 
     public function testLpaHasPeopleToNotify()

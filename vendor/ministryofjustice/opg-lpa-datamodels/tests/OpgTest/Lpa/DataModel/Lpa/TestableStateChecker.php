@@ -31,11 +31,6 @@ class TestableStateChecker extends StateChecker
         return parent::lpaHasFinishedCreation();
     }
 
-    public function testLpaHasCreated()
-    {
-        return parent::lpaHasCreated();
-    }
-
     public function testLpaHasPeopleToNotify($index = null)
     {
         return parent::lpaHasPeopleToNotify($index);
