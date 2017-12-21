@@ -2,10 +2,8 @@
 
 namespace OpgTest\Lpa\DataModel\Common;
 
-use Opg\Lpa\DataModel\Common\Dob;
 use OpgTest\Lpa\DataModel\TestHelper;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 class DobTest extends TestCase
 {
