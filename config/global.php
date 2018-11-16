@@ -18,6 +18,10 @@ return [
             'client' => [
                 'region' => 'eu-west-1',
                 'version' => '2012-11-05',
+                'credentials' => ( getenv('AWS_ACCESS_KEY_ID_SQS') && getenv('AWS_SECRET_ACCESS_KEY_SQS') ) ? [
+                    'key'    => getenv('AWS_ACCESS_KEY_ID_SQS'),
+                    'secret' => getenv('AWS_SECRET_ACCESS_KEY_SQS'),
+                ] : null,
             ],
         ],
     ],
