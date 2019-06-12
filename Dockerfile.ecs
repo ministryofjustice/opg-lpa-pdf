@@ -1,0 +1,122 @@
+FROM php:7.1-fpm-alpine
+# what opg-base-1604 used to do...
+RUN apk add --no-cache su-exec
+## replaces echo "Installing Gosu" &&\
+
+RUN apk add --no-cache git \
+  wget \
+  dnsmasq \
+  unzip \
+  zip \
+  netcat-openbsd \
+  iproute2 \
+  sudo
+# python3.5-dev libmysqlclient-dev
+RUN apk add --no-cache python3 && \
+  pip3 install --upgrade pip && \
+  pip3 install --upgrade setuptools && \
+  if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+  if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+  rm -r /root/.cache
+
+RUN pip3 --no-cache-dir install --upgrade awscli
+
+## This fails to install
+# ENV BEAVER_VERSION="36.2.1" 
+# RUN pip3 --no-cache-dir install beaver==${BEAVER_VERSION}
+# RUN mkdir -p /etc/beaver.d &&\
+# chmod a+x /etc/sv/beaver/run  && ln -s /etc/sv/beaver  /etc/service/   &&\
+# RUN chmod a+x /etc/sv/dnsmasq/run && ln -s /etc/sv/dnsmasq /etc/service/ 
+
+# Add Confd to configure parameters on start
+ENV CONFD_VERSION="0.16.0"
+RUN wget -q -O /usr/local/bin/confd "https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64" \
+  && chmod +x /usr/local/bin/confd
+
+
+## Add NGINX
+RUN apk add --no-cache nginx
+WORKDIR /
+EXPOSE 80
+EXPOSE 443
+
+# what opg-nginx-1604 used to do...
+ENV OPG_NGINX_SERVER_NAMES="localhost"
+# RUN echo "Setup nginx user and dirs" &&\
+#   adduser -S nginx -G nginx &&\
+#   getent group | grep nginx && \
+#   # ln -s /etc/sv/nginx /etc/service/ &&\
+#   mkdir -p /var/log/nginx /var/lib/nginx/body \
+#   /app/public /etc/nginx/app.conf.d &&\
+#   chown nginx:nginx /var/log/nginx &&\
+#   echo "Hello World from opguk/nginx" > /app/public/index.html
+
+## Route NGINX logs to stdout/stderr
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+  && ln -sf /dev/stderr /var/log/nginx/error.log
+
+## Install openssl for wget and certificate generation
+RUN apk add --update openssl
+
+# What opg-php-fpm-71-ppa-1604 used to do...
+ENV STATSD_HOST="monitoring" \
+  STATSD_PORT="8125" \
+  STATSD_DELAY="10" \
+  FPM_STATUS_URL="http://localhost:81/status" \
+  OPG_PHP_POOL_USER="app" \
+  OPG_PHP_POOL_GROUP="app" \
+  OPG_PHP_POOL_CHILDREN_MAX="4" \
+  OPG_PHP_POOL_REQUESTS_MAX="0" \
+  OPG_PHP_POOL_REQUEST_TERMINATE_TIMEOUT="60" \
+  OPG_PHP_POOL_MEMORY_LIMIT="256M" \
+  OPG_PHP_POOL_POST_MAX_SIZE="64M" \
+  OPG_PHP_POOL_UPLOAD_MAX_FILESIZE="64M" \
+  OPG_PHP_POOL_MAX_INPUT_VARS="1000"
+
+## Install Xdebug if directed to with build arg from docker-compose.yml
+ARG REQUIRE_XDEBUG=false
+RUN if [ $REQUIRE_XDEBUG = "true" ] ; then \
+  pecl install xdebug-2.5.5; \
+  docker-php-ext-enable xdebug; \
+  fi ;
+
+
+# Start of lpa-pdf
+
+RUN addgroup supervisor
+
+RUN apk add --update make \
+  # php7.1-cli \ couldn't find
+  php7-dev \
+  pdftk \
+  php7-mcrypt \
+  php7-curl \
+  php7-pear
+
+# Add application logging config(s)
+ADD docker/beaver.d /etc/beaver.d
+
+ADD . /app
+RUN mkdir -p /srv/opg-lpa-pdf2/application && \
+  mkdir /srv/opg-lpa-pdf2/application/releases && \
+  chown -R app:app /srv/opg-lpa-pdf2/application && \
+  chmod -R 755 /srv/opg-lpa-pdf2/application && \
+  ln -s /app /srv/opg-lpa-pdf2/application/current
+
+# Temporarily download composer, run it to get dependancies, then remove it
+RUN cd /tmp && \
+  curl -s https://getcomposer.org/installer | php && \
+  cd /app && \
+  mkdir -p /app/vendor && \
+  chown -R app:app /app/vendor && \
+  su-exec app php /tmp/composer.phar install --prefer-dist --optimize-autoloader --no-suggest --no-interaction --no-scripts && \
+  rm /tmp/composer.phar && \
+  rm -rf docker README* LICENSE* composer.*
+
+ADD docker/my_init/* /etc/my_init.d/
+RUN chmod a+x /etc/my_init.d/*
+
+RUN mkdir /etc/service/opg-lpa-pdf2/
+ADD docker/confd /etc/confd
+
+ENV OPG_SERVICE pdf
