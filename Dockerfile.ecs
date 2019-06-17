@@ -1,22 +1,27 @@
-FROM php:7.1-fpm-alpine
+FROM php:7.1-fpm-stretch
+# using debian for pdftk
 # what opg-base-1604 used to do...
-RUN apk add --no-cache su-exec
-## replaces echo "Installing Gosu" &&\
-
-RUN apk add --no-cache git \
+# install dependencies
+RUN set -eux; \
+  apt-get update; \
+  apt-get install -y gosu \
+  git \
   wget \
   dnsmasq \
   unzip \
   zip \
   netcat-openbsd \
   iproute2 \
-  sudo
-# python3.5-dev libmysqlclient-dev
-RUN apk add --no-cache python3 && \
-  pip3 install --upgrade pip && \
-  pip3 install --upgrade setuptools && \
+  sudo \
+  python3 \
+  python3-pip; \
+  rm -rf /var/lib/apt/lists/*
+
+
+RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade setuptools && \
   if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
-  if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+  if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
   rm -r /root/.cache
 
 RUN pip3 --no-cache-dir install --upgrade awscli
@@ -35,28 +40,32 @@ RUN wget -q -O /usr/local/bin/confd "https://github.com/kelseyhightower/confd/re
 
 
 ## Add NGINX
-RUN apk add --no-cache nginx
+# RUN apt install nginx
+RUN set -eux; \
+  apt-get update; \
+  apt-get install -y  nginx \
+  openssl
 WORKDIR /
 EXPOSE 80
 EXPOSE 443
 
 # what opg-nginx-1604 used to do...
 ENV OPG_NGINX_SERVER_NAMES="localhost"
-# RUN echo "Setup nginx user and dirs" &&\
-#   adduser -S nginx -G nginx &&\
-#   getent group | grep nginx && \
-#   # ln -s /etc/sv/nginx /etc/service/ &&\
-#   mkdir -p /var/log/nginx /var/lib/nginx/body \
-#   /app/public /etc/nginx/app.conf.d &&\
-#   chown nginx:nginx /var/log/nginx &&\
-#   echo "Hello World from opguk/nginx" > /app/public/index.html
+RUN echo "Setup nginx user and dirs"
+RUN adduser --disabled-password --gecos '' nginx && adduser nginx nginx && \
+  # ln -s /etc/sv/nginx /etc/service/ &&\
+  mkdir -p /var/log/nginx /var/lib/nginx/body \
+  /app/public /etc/nginx/app.conf.d &&\
+  chown nginx:nginx /var/log/nginx &&\
+  echo "Hello World from opguk/nginx" > /app/public/index.html
 
 ## Route NGINX logs to stdout/stderr
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log
 
 ## Install openssl for wget and certificate generation
-RUN apk add --update openssl
+# already in base?
+# RUN apt install --update openssl
 
 # What opg-php-fpm-71-ppa-1604 used to do...
 ENV STATSD_HOST="monitoring" \
@@ -82,23 +91,25 @@ RUN if [ $REQUIRE_XDEBUG = "true" ] ; then \
 
 
 # Start of lpa-pdf
-
 RUN addgroup supervisor
 
-# pdftk is not present in alpine linux 3.9
-RUN apk add --update --no-cache pdftk 
+RUN set -eux; \
+  apt-get update; \
+  apt-get install -y pdftk
 
-RUN apk add --update make \
-  # php7.1-cli \ couldn't find
-  php7-dev \
-  php7-mcrypt \
-  php7-curl \
-  php7-pear
+# This doesn't work, are these php modules?
+# RUN set -eux; \
+#   apt-get update; \
+#   apt-get install -y php7.1-pear \
+#   php7-mcrypt \
+#   php7-curl
 
 # Add application logging config(s)
-ADD docker/beaver.d /etc/beaver.d
+# Not doing this as beaver not installed above
+# ADD docker/beaver.d /etc/beaver.d
 
 ADD . /app
+RUN adduser --disabled-password --gecos '' app && adduser app app
 RUN mkdir -p /srv/opg-lpa-pdf2/application && \
   mkdir /srv/opg-lpa-pdf2/application/releases && \
   chown -R app:app /srv/opg-lpa-pdf2/application && \
@@ -106,12 +117,21 @@ RUN mkdir -p /srv/opg-lpa-pdf2/application && \
   ln -s /app /srv/opg-lpa-pdf2/application/current
 
 # Temporarily download composer, run it to get dependancies, then remove it
+
 RUN cd /tmp && \
   curl -s https://getcomposer.org/installer | php && \
   cd /app && \
   mkdir -p /app/vendor && \
   chown -R app:app /app/vendor && \
-  su-exec app php /tmp/composer.phar install --prefer-dist --optimize-autoloader --no-suggest --no-interaction --no-scripts && \
+  # This returns an error at present
+  # Deprecation warning: require.NSmithUK/dynamo-queue-php is invalid, it should not contain uppercase characters. Please use nsmithuk/dynamo-queue-php instead. Make sure you fix this as Composer 2.0 will error.
+  # Loading composer repositories with package information
+  # Installing dependencies (including require-dev) from lock file
+  # Your requirements could not be resolved to an installable set of packages.
+  #   Problem 1
+  #     - Installation request for nsmithuk/dynamo-queue-php v1.1.0 -> satisfiable by nsmithuk/dynamo-queue-php[v1.1.0].
+  #     - nsmithuk/dynamo-queue-php v1.1.0 requires ext-pcntl * -> the requested PHP extension pcntl is missing from your system.
+  gosu app php /tmp/composer.phar install --prefer-dist --optimize-autoloader --no-suggest --no-interaction --no-scripts && \
   rm /tmp/composer.phar && \
   rm -rf docker README* LICENSE* composer.*
 
