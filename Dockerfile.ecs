@@ -85,10 +85,12 @@ RUN if [ $REQUIRE_XDEBUG = "true" ] ; then \
 
 RUN addgroup supervisor
 
+# pdftk is not present in alpine linux 3.9
+RUN apk add --update --no-cache pdftk 
+
 RUN apk add --update make \
   # php7.1-cli \ couldn't find
   php7-dev \
-  pdftk \
   php7-mcrypt \
   php7-curl \
   php7-pear
