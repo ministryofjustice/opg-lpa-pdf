@@ -40,7 +40,6 @@ RUN wget -q -O /usr/local/bin/confd "https://github.com/kelseyhightower/confd/re
 
 
 ## Add NGINX
-# RUN apt install nginx
 RUN set -eux; \
   apt-get update; \
   apt-get install -y  nginx \
@@ -62,10 +61,6 @@ RUN adduser --disabled-password --gecos '' nginx && adduser nginx nginx && \
 ## Route NGINX logs to stdout/stderr
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log
-
-## Install openssl for wget and certificate generation
-# already in base?
-# RUN apt install --update openssl
 
 # What opg-php-fpm-71-ppa-1604 used to do...
 ENV STATSD_HOST="monitoring" \
@@ -95,14 +90,7 @@ RUN addgroup supervisor
 
 RUN set -eux; \
   apt-get update; \
-  apt-get install -y pdftk
-
-# This doesn't work, are these php modules?
-# RUN set -eux; \
-#   apt-get update; \
-#   apt-get install -y php7.1-pear \
-#   php7-mcrypt \
-#   php7-curl
+  apt-get install -y pdftk libmcrypt-dev libcurl3-dev
 
 # Add application logging config(s)
 # Not doing this as beaver not installed above
@@ -117,20 +105,16 @@ RUN mkdir -p /srv/opg-lpa-pdf2/application && \
   ln -s /app /srv/opg-lpa-pdf2/application/current
 
 # Temporarily download composer, run it to get dependancies, then remove it
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install mcrypt
+# RUN docker-php-ext-install pear
+RUN docker-php-ext-install curl
 
 RUN cd /tmp && \
   curl -s https://getcomposer.org/installer | php && \
   cd /app && \
   mkdir -p /app/vendor && \
   chown -R app:app /app/vendor && \
-  # This returns an error at present
-  # Deprecation warning: require.NSmithUK/dynamo-queue-php is invalid, it should not contain uppercase characters. Please use nsmithuk/dynamo-queue-php instead. Make sure you fix this as Composer 2.0 will error.
-  # Loading composer repositories with package information
-  # Installing dependencies (including require-dev) from lock file
-  # Your requirements could not be resolved to an installable set of packages.
-  #   Problem 1
-  #     - Installation request for nsmithuk/dynamo-queue-php v1.1.0 -> satisfiable by nsmithuk/dynamo-queue-php[v1.1.0].
-  #     - nsmithuk/dynamo-queue-php v1.1.0 requires ext-pcntl * -> the requested PHP extension pcntl is missing from your system.
   gosu app php /tmp/composer.phar install --prefer-dist --optimize-autoloader --no-suggest --no-interaction --no-scripts && \
   rm /tmp/composer.phar && \
   rm -rf docker README* LICENSE* composer.*
@@ -138,7 +122,7 @@ RUN cd /tmp && \
 ADD docker/my_init/* /etc/my_init.d/
 RUN chmod a+x /etc/my_init.d/*
 
-RUN mkdir /etc/service/opg-lpa-pdf2/
+RUN mkdir -p /etc/service/opg-lpa-pdf2/
 ADD docker/confd /etc/confd
 
 ENV OPG_SERVICE pdf
